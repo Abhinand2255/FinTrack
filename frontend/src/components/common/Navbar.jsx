@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import api from "../../api/client";
+import { GmailIcon } from "./GoogleIcons";
 
 export default function Navbar({ onMobileMenuToggle, onOpenAddTransaction }) {
   const { user } = useAuth();
@@ -89,9 +90,14 @@ export default function Navbar({ onMobileMenuToggle, onOpenAddTransaction }) {
             {user?.username?.[0] || "U"}
           </div>
           <div className="hidden lg:block text-left text-xs">
-            <p className="font-semibold text-slate-800 dark:text-slate-200 leading-none">
-              {user?.username}
-            </p>
+            <div className="flex items-center gap-1.5 leading-none">
+              <p className="font-semibold text-slate-800 dark:text-slate-200">
+                {user?.username}
+              </p>
+              {user?.email?.toLowerCase().endsWith("@gmail.com") && (
+                <GmailIcon className="w-3 h-3 shrink-0" />
+              )}
+            </div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400">
               {user?.preferred_currency || "INR"}
             </span>

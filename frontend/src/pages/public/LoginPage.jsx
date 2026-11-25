@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { Lock, User } from "lucide-react";
+import { GoogleIcon } from "../../components/common/GoogleIcons";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -10,6 +11,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  const handleGoogleQuick = () => {
+    const input = prompt("Enter your registered username or Gmail address:");
+    if (input) {
+      const trimmed = input.trim();
+      const extracted = trimmed.includes("@") ? trimmed.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : trimmed;
+      setUsername(extracted);
+      toast.success("Username loaded. Enter your password to sign in.");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +48,7 @@ export default function LoginPage() {
   return (
     <div className="flex-1 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-xl transition-all">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="inline-flex w-12 h-12 rounded-2xl bg-blue-600 items-center justify-center text-white font-extrabold text-2xl mb-3 shadow-lg shadow-blue-500/30">
             F
           </div>
@@ -47,6 +58,29 @@ export default function LoginPage() {
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Access your secure financial dashboard
           </p>
+        </div>
+
+        {/* Continue with Google button */}
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={handleGoogleQuick}
+            className="w-full py-2.5 px-4 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700/80 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xs transition-all flex items-center justify-center space-x-2.5 active:scale-[0.99]"
+          >
+            <GoogleIcon className="w-4 h-4" />
+            <span>Continue with Google / Gmail</span>
+          </button>
+
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white dark:bg-slate-900 px-3 text-slate-400">
+                Or sign in with username
+              </span>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

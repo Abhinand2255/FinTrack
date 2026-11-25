@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/client";
 import toast from "react-hot-toast";
-import { User, Mail, Phone, DollarSign, Lock, ShieldCheck } from "lucide-react";
+import { User, Mail, Phone, DollarSign, Lock, ShieldCheck, ExternalLink } from "lucide-react";
+import { GmailIcon } from "../../components/common/GoogleIcons";
 
 export default function ProfilePage() {
   const { user, updateUserProfile } = useAuth();
@@ -96,8 +97,16 @@ export default function ProfilePage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               {user?.username}
             </h2>
-            <p className="text-xs text-slate-500">{user?.email}</p>
-            <span className="inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">
+            <div className="flex items-center gap-2 mt-0.5">
+              <p className="text-xs text-slate-500">{user?.email}</p>
+              {user?.email?.toLowerCase().endsWith("@gmail.com") && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
+                  <GmailIcon className="w-3 h-3" />
+                  Gmail Account
+                </span>
+              )}
+            </div>
+            <span className="inline-block mt-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">
               Active FinTrack Account
             </span>
           </div>
@@ -131,15 +140,38 @@ export default function ProfilePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Email Address (Read-only)
-              </label>
-              <input
-                type="email"
-                disabled
-                value={email}
-                className="w-full px-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 cursor-not-allowed"
-              />
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Email Address (Read-only)
+                </label>
+                {email?.toLowerCase().endsWith("@gmail.com") && (
+                  <a
+                    href="https://mail.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    <GmailIcon className="w-3 h-3" />
+                    Open Inbox
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                )}
+              </div>
+              <div className="relative">
+                <div className="absolute left-3 top-2.5">
+                  {email?.toLowerCase().endsWith("@gmail.com") ? (
+                    <GmailIcon className="w-4 h-4" />
+                  ) : (
+                    <Mail className="w-4 h-4 text-slate-400" />
+                  )}
+                </div>
+                <input
+                  type="email"
+                  disabled
+                  value={email}
+                  className="w-full pl-9 pr-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 cursor-not-allowed"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
