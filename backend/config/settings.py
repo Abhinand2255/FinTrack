@@ -15,10 +15,11 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
-).split(",")
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,.onrender.com").split(",")
+    if h.strip()
+]
 
 
 # INSTALLED APPLICATIONS
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -183,10 +185,9 @@ SIMPLE_JWT = {
 
 
 # CORS CONFIGURATION
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+cors_env = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+CORS_ALLOWED_ORIGINS = [o.strip() for o in cors_env.split(",") if o.strip()]
+CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "False").lower() == "true"
 
 
 # EMAIL CONFIGURATION
