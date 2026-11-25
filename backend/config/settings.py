@@ -185,8 +185,14 @@ SIMPLE_JWT = {
 
 
 # CORS CONFIGURATION
-cors_env = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+cors_env = os.getenv(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173,https://financetracker-jgvx.vercel.app"
+)
 CORS_ALLOWED_ORIGINS = [o.strip() for o in cors_env.split(",") if o.strip()]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
+]
 CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "False").lower() == "true"
 
 

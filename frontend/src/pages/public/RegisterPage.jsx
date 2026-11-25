@@ -37,14 +37,16 @@ export default function RegisterPage() {
       navigate("/dashboard");
     } catch (err) {
       const data = err.response?.data;
-      if (typeof data === "object") {
+      if (data && typeof data === "object") {
         const firstErrorKey = Object.keys(data)[0];
         const errorMsg = Array.isArray(data[firstErrorKey])
           ? data[firstErrorKey][0]
           : data[firstErrorKey];
         toast.error(`${firstErrorKey}: ${errorMsg}`);
+      } else if (err.message) {
+        toast.error(err.message);
       } else {
-        toast.error("Failed to register. Please check your information.");
+        toast.error("Failed to register. Please check your connection.");
       }
     } finally {
       setLoading(false);
